@@ -1,4 +1,4 @@
-.PHONY: all
+.PHONY: install uninstall clean
 SRCS = $(wildcard models/*) $(wildcard util/*) m3sa main.py
 
 install: $(SRCS) venv

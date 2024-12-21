@@ -30,7 +30,8 @@ import kotlin.io.path.Path
 public val ANALYSIS_SCRIPTS_DIRECTORY: String = "./opendc-experiments/opendc-experiments-m3sa/src/main/python"
 public val ABSOLUTE_SCRIPT_PATH: String =
     Path("$ANALYSIS_SCRIPTS_DIRECTORY/main.py").toAbsolutePath().normalize().toString()
-public val SCRIPT_LANGUAGE: String = Path("$ANALYSIS_SCRIPTS_DIRECTORY/venv/bin/python3").toAbsolutePath().normalize().toString()
+public val SCRIPT_LANGUAGE: String =
+    Path("$ANALYSIS_SCRIPTS_DIRECTORY/venv/bin/python3").toAbsolutePath().normalize().toString()
 
 public fun m3saAnalyze(
     outputFolderPath: String,
@@ -40,16 +41,17 @@ public fun m3saAnalyze(
         ProcessBuilder(
             SCRIPT_LANGUAGE,
             ABSOLUTE_SCRIPT_PATH,
+            "-o",
             outputFolderPath,
             m3saSetupPath,
-        ).directory(Path(ANALYSIS_SCRIPTS_DIRECTORY).toFile())
-            .start()
+            "$outputFolderPath/raw-output"
+        ).start()
 
     val exitCode = process.waitFor()
     if (exitCode == 0) {
         println("[M3SA says] M3SA operation(s) completed successfully.")
     } else {
-        val errors = process.errorStream.bufferedReader().readText()
+        val errors = process.errorStream.bufferedReader().readText() + process.inputStream.bufferedReader().readText()
         println("[M3SA says] Exit code $exitCode; Error(s): $errors")
     }
 }

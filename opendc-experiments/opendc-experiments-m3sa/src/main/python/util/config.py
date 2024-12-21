@@ -3,6 +3,8 @@ from warnings import warn
 from numpy import mean, median
 from typing import Callable
 from enum import Enum
+from sys import stderr
+import os
 
 FUNCTIONS = {
     "mean": mean,
@@ -158,19 +160,21 @@ def parse_configuration(config_path: str, output_path: str, simulation_path: str
     Reads the input JSON file and returns a SimulationConfig object
     Args:
         config_path: the path to the input JSON file
+        output_path: the path to the output folder
+        simulation_path: the path to the simulation folder
 
     Returns:
         a SimulationConfig object
     """
 
     try:
-        with (open(config_path, 'r') as raw_json):
-            input_json: dict[str, any] = load(raw_json)
+        with (open(config_path, 'r') as json):
+            input_json: dict[str, any] = load(json)
     except JSONDecodeError:
-        print(f"Error decoding JSON in file: {config_path}")
+        stderr.write(f"Error decoding JSON in file: {config_path}")
         exit(1)
     except IOError:
-        print(f"Error reading file: {config_path}")
+        stderr.write(f"Error reading file: {config_path}")
         exit(1)
 
     try:
