@@ -64,7 +64,6 @@ internal class M3SACommand : CliktCommand(name = "experiment") {
 
     var n = 1
     override fun run() {
-        val scenarioPathh = File("exp3/inputs/scenarios/scenario_sk.json")
         // read the file analysis and create one if doesn't exist
         val file = File("analysis.txt")
         if (!file.exists()) {
@@ -76,7 +75,7 @@ internal class M3SACommand : CliktCommand(name = "experiment") {
         }
         else {
             file.appendText("===================================================\n")
-            println("Finished for country ${scenarioPathh}")
+            println("Finished for country ${scenarioPath}")
             return
         };
 
@@ -84,7 +83,7 @@ internal class M3SACommand : CliktCommand(name = "experiment") {
         val startTime = System.currentTimeMillis()
         println("The provided m3saPath is $m3saPath")
 
-        val experiment = getExperiment(scenarioPathh).subList(0,16)
+        val experiment = getExperiment(scenarioPath).subList(0,8)
         runExperiment(experiment, parallelism)
 
         val simulationEnd = System.currentTimeMillis()
@@ -92,7 +91,7 @@ internal class M3SACommand : CliktCommand(name = "experiment") {
 
         if (m3saPath.toString().isNotEmpty()) {
             m3saAnalyze(
-                outputFolderPath = getOutputFolder(scenarioPathh),
+                outputFolderPath = getOutputFolder(scenarioPath),
                 m3saSetupPath = m3saPath.toString(),
             )
         } else {
