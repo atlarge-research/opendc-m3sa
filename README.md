@@ -1,9 +1,6 @@
-<a href="https://opendc.org/">
-    <img src="https://opendc.org/img/logo.png" alt="OpenDC logo" title="OpenDC" align="right" height="100" />
-</a>
+# M3SA
 
-# OpenDC
-
+Multi- and Meta-Model Simulation and Analysis for datacenter infrastructure
 Collaborative Datacenter Simulation and Exploration for Everybody
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](/LICENSE.txt)
@@ -13,31 +10,9 @@ Collaborative Datacenter Simulation and Exploration for Everybody
 
 -----
 
-This repository is the home of the OpenDC project, a free and open-source platform for cloud datacenter simulation.
-
-## Latest Release
-
-- General Availability (GA): [OpenDC v2.0](https://github.com/atlarge-research/opendc/releases/tag/v2.0) (May 10, 2021)
-- Preview (Release Candidate): [OpenDC v3.0-rc1](https://github.com/atlarge-research/opendc/releases/tag/v3.0-rc1) (Jan 27, 2023)
-
-## Documentation
-
-You can find the OpenDC documentation [on the website](https://atlarge-research.github.io/opendc/).
-The documentation is divided into several sections:
-
-* [Getting Started](https://atlarge-research.github.io/opendc/docs/category/getting-started/)
-* [Tutorials](https://atlarge-research.github.io/opendc/docs/category/tutorials/)
-* [Advanced Guides](https://atlarge-research.github.io/opendc/docs/category/advanced-guides/)
-* [Where to Get Support](https://atlarge-research.github.io/opendc/community/support/)
-* [Contributing Guide](https://atlarge-research.github.io/opendc/community/contributing/)
-
-The source code for the documentation is located in [site](site).
-
-## Contributing
-
-Questions, suggestions and contributions are welcome and appreciated!
-Please refer to the [contributing guidelines](CONTRIBUTING.md) for more details.
+## Abstract
+Datacenters are vital for the digital society but represent a considerable fraction of global energy consumption. To improve their sustainability and performance when demand is foreseen to increase, we envision simulators and simulation-based digital twins will become primary decision-making tools. However, unlike other fields focusing on key societal infrastructure such as waterworks and mass transit, datacenter simulators cannot yet combine multiple, independent models into their operation. Addressing this challenge, in this work we propose M3SA, a datacenter simulation and analysis framework that uses discrete-event simulation to predict, per model and combined into a meta-model, the impact on climate and performance of various realistic datacenter conditions. We design an architecture for simulating with multiple concurrent models, a technique to integrate the results of multiple models into a meta-model, and a procedure to evaluate the accuracy of the meta-model.
 
 ## License
 
-OpenDC is distributed under the MIT license. See [LICENSE.txt](/LICENSE.txt).
+M3SA is distributed under the MIT license. See [LICENSE.txt](/LICENSE.txt).
