@@ -21,6 +21,9 @@ EXP2_EXPERIMENTS=("marconi" "solvinity")
 EXP2_SCENARIO_PATH="experiments/experiment2/scenarios"
 EXP2_M3SA_SETUP="experiments/experiment2/inputs"
 
+EXP3_SCENARIOS_PATH="experiments/experiment3/inputs/scenarios"
+EXP3_M3SA_SETUP="experiments/experiment3/inputs/m3saSetup.json"
+
 main() {
     if [ ! -d "$M3SA_PY" ]; then
         echo "M3SA Python not found. Please include M3SA Python into ${M3SA_PY}"
@@ -114,6 +117,14 @@ experiment2() {
 experiment3() {
     echo "Running experiment 3..."
 
+    EXP3_SCENARIOS_PATH="$EXP3_SCENARIOS_PATH/scenario_at.json"
+    for scenario in $(ls "$EXP3_SCENARIOS_PATH"); do
+        echo "Running experiment 3 for $scenario..."
+        java -jar "$M3SA_OPENDC_JAR" \
+            --experiment-path "$EXP3_SCENARIOS_PATH" \
+            -m "$EXP3_M3SA_SETUP" \
+            -e "$M3SA_PY" # --experiment-path "${EXP3_SCENARIOS_PATH}/${scenario}" \
+    done
 }
 
 export_figures() {
