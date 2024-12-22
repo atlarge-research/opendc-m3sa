@@ -117,14 +117,15 @@ experiment2() {
 experiment3() {
     echo "Running experiment 3..."
 
-    EXP3_SCENARIOS_PATH="$EXP3_SCENARIOS_PATH/scenario_at.json"
     for scenario in $(ls "$EXP3_SCENARIOS_PATH"); do
         echo "Running experiment 3 for $scenario..."
         java -jar "$M3SA_OPENDC_JAR" \
-            --experiment-path "$EXP3_SCENARIOS_PATH" \
+            --experiment-path "${EXP3_SCENARIOS_PATH}/${scenario}" \
             -m "$EXP3_M3SA_SETUP" \
-            -e "$M3SA_PY" # --experiment-path "${EXP3_SCENARIOS_PATH}/${scenario}" \
+            -e "$M3SA_PY"
     done
+
+    echo "Experiment 3 done."
 }
 
 export_figures() {

@@ -1,7 +1,6 @@
 # M3SA
 
-Multi- and Meta-Model Simulation and Analysis for datacenter infrastructure
-Collaborative Datacenter Simulation and Exploration for Everybody
+Multi- and Meta-Model Simulation and Analysis for ICT infrastructure.
 
 ---
 
@@ -10,6 +9,8 @@ Collaborative Datacenter Simulation and Exploration for Everybody
 -   [Abstract](#abstract)
 -   [Repository Structure](#repository-structure)
 -   [M3SA Architecture](#m3sa-architecture)
+-   [Reproducibility capsule](#reproducibility-capsule)
+-   [Open Science](#open-science)
 -   [License](#license)
 
 ---
@@ -35,6 +36,35 @@ Datacenters are vital for the digital society but represent a considerable fract
 We design M3SA to be capable of operating coupled or decoupled from a datacenter simulator. The figure above depicts an overview of the system's architecture, in which M3SA extends a black-boxed simulator. We couple M3SA with OpenDC, a peer-reviewed, open-source, discrete-event simulator with simple interfaces, and over 5 years of development and operation.
 
 The user interacts with the system through the Input Interface (A) and Output Interface (B) interfaces. The M3SA process begins with the user configuring the Multi-Model (C) and the Meta-Model (D). The simulation process is triggered and controlled by the M3SA backend, occurring between (M)-(S): the system sets up a simulation based on user input, simulates, and centralizes predictions. The simulation block (M)-(S) reflects the operation of discrete-event simulators commonly used in the field, similar to the architectures of OpenDC and CloudSim; specifically, the simulation assembler (M) is where single models are typically defined in current experiments.
+
+## Reproducibility capsule
+### Reproducibility (with docker)
+```bash
+cd reproducibility-capsule 
+```
+
+```bash
+sudo docker build -t m3sa .
+```
+```bash
+sudo docker run -it m3sa
+````
+### Reproducibility capsule (without docker)
+Step 1 (alternative) - without docker
+#### Dependencies
+- Gradle
+- JDK 21
+- Python 3.12
+- Make
+
+```bash
+cd reproducibility-capsule
+make build
+make run
+```
+
+## Open Science
+We provide M3SA as open-source software, under the MIT license. Together with M3SA, we make open-source the trace archive used throughout the experiments.  Double-blinded submission link: https://anonymous.4open.science/r/trace-archive/.
 
 ## License
 
