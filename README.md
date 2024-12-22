@@ -38,4 +38,4 @@ The user interacts with the system through the Input Interface (A) and Output In
 
 ## License
 
-# M3SA is distributed under the MIT license. See [LICENSE.txt](/LICENSE.txt).
+M3SA is distributed under the MIT license. See [LICENSE](/LICENSE).
