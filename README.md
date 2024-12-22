@@ -38,19 +38,29 @@ We design M3SA to be capable of operating coupled or decoupled from a datacenter
 The user interacts with the system through the Input Interface (A) and Output Interface (B) interfaces. The M3SA process begins with the user configuring the Multi-Model (C) and the Meta-Model (D). The simulation process is triggered and controlled by the M3SA backend, occurring between (M)-(S): the system sets up a simulation based on user input, simulates, and centralizes predictions. The simulation block (M)-(S) reflects the operation of discrete-event simulators commonly used in the field, similar to the architectures of OpenDC and CloudSim; specifically, the simulation assembler (M) is where single models are typically defined in current experiments.
 
 ## Reproducibility capsule
-### Reproducibility (with docker)
-```bash
-cd reproducibility-capsule 
-```
 
-```bash
-sudo docker build -t m3sa .
-```
-```bash
-sudo docker run -it m3sa
-````
-### Reproducibility capsule (without docker)
-Step 1 (alternative) - without docker
+[//]: # (### Reproducibility &#40;with docker&#41;)
+
+[//]: # (```bash)
+
+[//]: # (cd reproducibility-capsule )
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (```bash)
+
+[//]: # (sudo docker build -t m3sa .)
+
+[//]: # (```)
+
+[//]: # (```bash)
+
+[//]: # (sudo docker run -it m3sa)
+
+[//]: # (````)
+[//]: # (### Reproducibility capsule &#40;without docker&#41;)
+[//]: # (Step 1 &#40;alternative&#41; - without docker)
 #### Dependencies
 - Gradle
 - JDK 21
