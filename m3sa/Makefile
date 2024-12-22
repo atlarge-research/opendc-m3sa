@@ -6,6 +6,7 @@ install: $(SRCS) venv
 venv: requirements.txt
 	python -m venv venv
 	. venv/bin/activate && pip install -r requirements.txt
+	mkdir -p ${HOME}/.local/bin
 	ln -s $(PWD)/m3sa ${HOME}/.local/bin/m3sa
 	@echo "WARNING: M3SA is installed under $(PWD). Do not move the directory."
 

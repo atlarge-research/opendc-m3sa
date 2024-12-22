@@ -23,7 +23,7 @@ RUN mkdir -p $HOME/.local/bin
 
 RUN chmod +x /m3sa/m3sa-experiment
 
-RUN cd /m3sa/opt/python && make install
+RUN cd /m3sa/bin/m3sa && make install
 
 # Default command to execute the script
 CMD ["/bin/bash", "-c", "./m3sa-experiment"]
