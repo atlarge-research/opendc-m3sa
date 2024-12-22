@@ -22,9 +22,13 @@
 
 @file:JvmName("M3saCliKt")
 
-package org.opendc.experiments.base.runner
+package org.opendc.experiments.m3sa.runner
 
+import org.opendc.experiments.base.runner.runScenario
+import org.opendc.experiments.base.runner.setupOutputFolderStructure
 import org.opendc.experiments.base.scenario.Scenario
+import java.io.File
+import java.util.Optional
 import java.util.concurrent.ForkJoinPool
 
 /**
@@ -36,12 +40,15 @@ import java.util.concurrent.ForkJoinPool
 public fun runExperiment(
     experiment: List<Scenario>,
     parallelism: Int,
+    extraSimDataPath: Optional<String>
 ) {
     val ansiReset = "\u001B[0m"
     val ansiGreen = "\u001B[32m"
     val ansiBlue = "\u001B[34m"
 
     setupOutputFolderStructure(experiment[0].outputFolder)
+
+    var latestScenarioId = experiment.map { it.id }.maxOrNull() ?: 0
 
     for (scenario in experiment) {
         val pool = ForkJoinPool(parallelism)
@@ -54,5 +61,16 @@ public fun runExperiment(
             scenario,
             pool,
         )
+    }
+
+    if (extraSimDataPath.isEmpty) return
+
+    for (directory in File(extraSimDataPath.get()).listFiles()!!) {
+        if (!directory.isDirectory) continue
+        latestScenarioId += 1
+
+        val copyPath = "${experiment[0].outputFolder}/raw-output/${latestScenarioId}"
+        File(copyPath).mkdirs()
+        directory.copyRecursively(File(copyPath), true)
     }
 }

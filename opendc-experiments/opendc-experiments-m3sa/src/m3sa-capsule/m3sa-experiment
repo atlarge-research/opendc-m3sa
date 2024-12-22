@@ -1,0 +1,116 @@
+#!/bin/bash
+
+M3SA_OPENDC_JAR="bin/M3SA.jar"
+M3SA_PY="opt/python"
+
+# Paths to Experiment1 Footprinter -> Fig 9A
+EXP1_FOOTPRINTER_RAW="experiments/experiment1/footprinter/raw-output"
+EXP1_FOOTPRINTER_M3SA="experiments/experiment1/footprinter/m3saSetup.json"
+EXP1_FOOTPRINTER_RESULT="results/experiment1/footprinter"
+# Paths to Experiment1 MultiModel -> Fig 9B
+EXP1_MULTIMODEL_SCENARIO="experiments/experiment1/multimodel/scenario.json"
+EXP1_MULTIMODEL_M3SA="experiments/experiment1/multimodel/m3saSetup.json"
+EXP1_MULTIMODEL_RESULT="results/experiment1/multimodel"
+# Paths to Experiment1 MetaModel -> Fig 9C
+EXP1_METAMODEL_SCENARIO="experiments/experiment1/metamodel/scenario.json"
+EXP1_METAMODEL_M3SA="experiments/experiment1/metamodel/m3saSetup.json"
+EXP1_METAMODEL_RESULT="results/experiment1/metamodel"
+
+EXP2_FAILURE_MODELS=("-failures" "-nofailures")
+# EXP2_EXPERIMENTS=("marconi" "solvinity")
+EXP2_EXPERIMENTS=("solvinity")
+EXP2_SCENARIO_PATH="experiments/experiment2/scenarios"
+EXP2_M3SA_SETUP="experiments/experiment2/inputs"
+
+main() {
+	experiments_to_run=("experiment1" "experiment2" "experiment3")
+
+	if [ ! -z "$1" ]; then
+		experiments_to_run=("$1")
+	fi
+
+	echo "Running experiments: ${experiments_to_run[@]}"
+	for experiment in "${experiments_to_run[@]}"; do
+		if [ "$(type -t $experiment)" = function ]; then
+			"$experiment"
+		else
+			echo "Experiment $experiment not found."
+		fi
+	done
+
+	export_figures
+	echo "Experiments complete."
+}
+
+experiment1() {
+	echo "Running experiment 1..."
+
+	EXTRA_RAW_SIM="experiments/experiment1/footprinter/raw-output"
+
+	# ========================== FIGURE A ==========================
+	./"$M3SA_PY/m3sa" -o "$EXP1_FOOTPRINTER_RESULT" "$EXP1_FOOTPRINTER_M3SA" "$EXP1_FOOTPRINTER_RAW" ||
+		exit 1
+	# ========================== FIGURE A ==========================
+
+	# ========================== FIGURE B ==========================
+	java -jar "$M3SA_OPENDC_JAR" --experiment-path "$EXP1_MULTIMODEL_SCENARIO" ||
+		exit 1
+
+	# Copy footprinter raw output to simulation data results
+	for dir in $(ls "$EXTRA_RAW_SIM"); do
+		cp -r "$EXTRA_RAW_SIM/$dir" "$EXP1_MULTIMODEL_RESULT/outputs/raw-output/$dir" ||
+			exit 1
+	done
+
+	# Run M3SA python to generate plots
+	./"$M3SA_PY/m3sa" -o "$EXP1_MULTIMODEL_RESULT/outputs" "$EXP1_MULTIMODEL_M3SA" "$EXP1_MULTIMODEL_RESULT/outputs/raw-output" ||
+		exit 1
+	# ========================== FIGURE B ==========================
+
+	# ========================== FIGURE C ==========================
+	java -jar "$M3SA_OPENDC_JAR" --experiment-path "$EXP1_METAMODEL_SCENARIO" ||
+		exit 1
+
+	# Copy footprinter raw output to simulation data results
+	for dir in $(ls "$EXTRA_RAW_SIM"); do
+		cp -r "$EXTRA_RAW_SIM/$dir" "$EXP1_METAMODEL_RESULT/outputs/raw-output/$dir" ||
+			exit 1
+	done
+
+	# Run M3SA python to generate plots
+	./"$M3SA_PY/m3sa" -o "$EXP1_METAMODEL_RESULT/outputs" "$EXP1_METAMODEL_M3SA" "$EXP1_METAMODEL_RESULT/outputs/raw-output" ||
+		exit 1
+	# ========================== FIGURE C ==========================
+
+	echo "Done experiment 1."
+}
+
+experiment2() {
+	echo "Running experiment 2..."
+
+	for failure_model in "${EXP2_FAILURE_MODELS[@]}"; do
+		for experiment in "${EXP2_EXPERIMENTS[@]}"; do
+			echo "Running experiment 2 for $experiment with $failure_model..."
+			java -jar "$M3SA_OPENDC_JAR" \
+				--experiment-path "${EXP2_SCENARIO_PATH}/scenario-${experiment}${failure_model}.json" \
+				-m "${EXP2_M3SA_SETUP}/m3sa-${experiment}${failure_model}.json" \
+				-e "$M3SA_PY"
+		done
+	done
+}
+
+experiment3() {
+	echo "Running experiment 3..."
+
+}
+
+export_figures() {
+	mkdir -p results/figure-exports
+
+	for figure in $(find results -iname "*.pdf"); do
+		echo "Exporting $figure..."
+		cp "$figure" "results/figure-exports/$(basename $figure)"
+	done
+}
+
+main "$@"

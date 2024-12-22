@@ -22,7 +22,7 @@
 
 @file:JvmName("M3SACli")
 
-package org.opendc.experiments.base.runner
+package org.opendc.experiments.m3sa.runner
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.default
@@ -60,48 +60,46 @@ internal class M3SACommand : CliktCommand(name = "experiment") {
 
     private val m3saPath by option("-m", "--m3sa-setup-path", help = "path to m3sa setup file")
         .file(canBeDir = false, canBeFile = true)
-        .defaultLazy { File("") }
+
+    private val m3saExec by option("-e", "--m3sa-exec-path", help = "path to m3sa executable")
+        .file(canBeDir = true, canBeFile = false)
 
     var n = 1
     override fun run() {
         // read the file analysis and create one if doesn't exist
         val file = File("analysis.txt")
-        if (!file.exists()) {
+
+        if (!file.exists())
             file.createNewFile()
-        }
 
         if (this.n > 0) {
             this.n -= 1
-        }
-        else {
+        } else {
             file.appendText("===================================================\n")
             println("Finished for country ${scenarioPath}")
             return
-        };
-
+        }
 
         val startTime = System.currentTimeMillis()
-        println("The provided m3saPath is $m3saPath")
 
-        val experiment = getExperiment(scenarioPath).subList(0,8)
-        runExperiment(experiment, parallelism)
+        val experiment = getExperiment(scenarioPath)
+        org.opendc.experiments.base.runner.runExperiment(experiment, parallelism)
 
         val simulationEnd = System.currentTimeMillis()
-        println("Simulation time: ${(simulationEnd-startTime) / 1000} ms")
+        println("Simulation time: ${(simulationEnd - startTime) / 1000} ms")
 
-        if (m3saPath.toString().isNotEmpty()) {
-            m3saAnalyze(
-                outputFolderPath = getOutputFolder(scenarioPath),
-                m3saSetupPath = m3saPath.toString(),
-            )
-        } else {
-            println(
-                "\n" +
-                    "===================================================\n" +
-                    "|M3SA path is not provided. Skipping M3SA analysis.|\n" +
-                    "===================================================",
-            )
-        }
+        if (m3saPath != null && m3saExec != null) m3saAnalyze(
+            outputFolderPath = getOutputFolder(scenarioPath),
+            m3saSetupPath = m3saPath.toString(),
+            m3saExecPath = m3saExec.toString(),
+        )
+        else println(
+            "\n" +
+                "===================================================\n" +
+                "|M3SA path is not provided. Skipping M3SA analysis.|\n" +
+                "===================================================",
+        )
+
         val endTime = System.currentTimeMillis()
         println("OpenDC time: ${(simulationEnd - startTime) / 1000.0} s")
         println("M3SA time: ${(endTime - simulationEnd) / 1000.0} s")

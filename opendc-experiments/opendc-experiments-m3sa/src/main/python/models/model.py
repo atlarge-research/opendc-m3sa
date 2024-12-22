@@ -15,8 +15,8 @@ class Model:
     MultiModel and MetaModel for complex data analysis.
     """
 
-    def __init__(self, raw_sim_data: list[float], identifier: str):
-        self.raw_sim_data: list[float] = raw_sim_data
+    def __init__(self, raw_sim_data, identifier: str):
+        self.raw_sim_data = raw_sim_data
         self.id: str = str(identifier)
         self.processed_sim_data = []
         self.cumulative_time_series_values = []

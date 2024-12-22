@@ -1,0 +1,45 @@
+{
+    "name": "outputs/",
+    "topologies": [
+        {
+            "pathToFile": "exp2/inputs/topologies/topology_sqrt.json"
+        },
+        {
+            "pathToFile": "exp2/inputs/topologies/topology_linear.json"
+        },
+        {
+            "pathToFile": "exp2/inputs/topologies/topology_square.json"
+        },
+        {
+            "pathToFile": "exp2/inputs/topologies/topology_cubic.json"
+        },
+        {
+            "pathToFile": "exp2/inputs/topologies/topology_mse.json"
+        },
+        {
+            "pathToFile": "exp2/inputs/topologies/topology_asymptotic1.json"
+        },
+        {
+            "pathToFile": "exp2/inputs/topologies/topology_asymptotic2.json"
+        },
+        {
+            "pathToFile": "exp2/inputs/topologies/topology_asymptotic3.json"
+        }
+    ],
+    "workloads": [
+        {
+            "pathToFile": "exp2/inputs/marconi-22",
+            "type": "ComputeWorkload"
+        }
+    ],
+    "carbonTracePaths": [
+        "exp2/inputs/carbon_2022.parquet"
+    ],
+    "allocationPolicies": [
+        {
+            "policyType": "Mem"
+        }
+    ],
+    "outputFolder": "exp2/marconi-with-failures",
+    "runs": 1
+}

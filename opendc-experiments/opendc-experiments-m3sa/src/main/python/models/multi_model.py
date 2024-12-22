@@ -89,6 +89,8 @@ class MultiModel:
         self.init_models()
         if self.config.is_metamodel:
             self.COLOR_PALETTE = ["#b3b3b3" for _ in range(len(self.models))]
+        if len(self.config.plot_colors) > 0:
+            self.COLOR_PALETTE = self.config.plot_colors
         self.compute_windowed_aggregation()
 
     def get_model_path(self, dir: str) -> str:
@@ -318,7 +320,8 @@ class MultiModel:
             f"_plot_multimodel_metric={self.config.metric}"
             f"_window={self.window_size}"
             f".pdf"
-        )
+        ) if self.config.figure_export_name is None \
+            else f"{output_dir}/{self.config.figure_export_name}.pdf"
 
         plt.savefig(self.plot_path)
 
@@ -345,7 +348,8 @@ class MultiModel:
             if model.is_meta_model():
                 models_sums.append(model.cumulated)
             else:
-                cumulated_energy = round(sum(model.raw_sim_data), 2)
+                cumulated_energy = model.raw_sim_data.sum()
+                cumulated_energy = round(cumulated_energy, 2)
                 models_sums.append(cumulated_energy)
 
         return models_sums

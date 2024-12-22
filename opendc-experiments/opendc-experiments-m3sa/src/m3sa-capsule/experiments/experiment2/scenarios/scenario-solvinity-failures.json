@@ -1,0 +1,54 @@
+{
+  "name": "outputs/",
+  "topologies": [
+    {
+      "pathToFile": "experiments/experiment2/topologies/topology_sqrt.json"
+    },
+    {
+      "pathToFile": "experiments/experiment2/topologies/topology_linear.json"
+    },
+    {
+      "pathToFile": "experiments/experiment2/topologies/topology_square.json"
+    },
+    {
+      "pathToFile": "experiments/experiment2/topologies/topology_cubic.json"
+    },
+    {
+      "pathToFile": "experiments/experiment2/topologies/topology_mse.json"
+    },
+    {
+      "pathToFile": "experiments/experiment2/topologies/topology_asymptotic1.json"
+    },
+    {
+      "pathToFile": "experiments/experiment2/topologies/topology_asymptotic2.json"
+    },
+    {
+      "pathToFile": "experiments/experiment2/topologies/topology_asymptotic3.json"
+    }
+  ],
+  "workloads": [
+    {
+      "pathToFile": "experiments/experiment2/inputs/solvinity-13",
+      "type": "ComputeWorkload"
+    }
+  ],
+  "carbonTracePaths": ["experiments/experiment2/inputs/carbon_2022.parquet"],
+  "allocationPolicies": [
+    {
+      "policyType": "Mem"
+    }
+  ],
+  "failureModels": [
+    {
+      "type": "prefab",
+      "prefabName": "Ldns04Exp"
+    }
+  ],
+  "exportModels": [
+    {
+      "exportInterval": 300000
+    }
+  ],
+  "outputFolder": "results/experiment2/solvinity-failures",
+  "runs": 1
+}

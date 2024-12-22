@@ -136,6 +136,8 @@ class SimulationConfig:
         )
         self.seed: int = input_json.get("seed", 0)
         self.fig_size: tuple[int, int] = input_json.get("figsize", (20, 10))
+        self.plot_colors: list[str] = input_json.get("plot_colors", [])
+        self.figure_export_name: str | None = input_json.get("figure_export_name", None)
 
 
 def parse_range(user_input: dict[str, any], key: str) -> tuple[float, float] | None:

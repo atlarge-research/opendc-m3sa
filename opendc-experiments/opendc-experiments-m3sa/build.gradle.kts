@@ -25,9 +25,18 @@ description = "Multi-Meta-Model Simulation Analysis (M3SA) used across OpenDC mo
 // Build configuration
 plugins {
     `kotlin-library-conventions`
+    id("com.gradleup.shadow") version "9.0.0-beta4"
+}
+
+group = "org.opendc.m3sa"
+version = "0.1.0"
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
+    implementation(kotlin("stdlib"))
     api(libs.kotlinx.coroutines)
 
     testImplementation(projects.opendcSimulator.opendcSimulatorCore)
@@ -55,5 +64,38 @@ sourceSets {
     main {
         kotlin.srcDirs("src/main/kotlin", "src/main/python")
         resources.srcDir("src/main/resources")
+    }
+}
+
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath("com.gradleup.shadow:shadow-gradle-plugin:9.0.0-beta4")
+    }
+}
+
+tasks {
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.jvmTarget = "19"
+    }
+
+    // ShadowJar configuration
+    named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+        archiveBaseName.set("M3SA")
+        archiveVersion.set(version.toString())
+        archiveClassifier.set("")
+        mergeServiceFiles()
+        manifest {
+            attributes(
+                "Main-Class" to "org.opendc.experiments.m3sa.runner.M3SACli"
+            )
+        }
+    }
+
+    // Optionally set the shadow jar task as the default jar task
+    build {
+        dependsOn("shadowJar")
     }
 }

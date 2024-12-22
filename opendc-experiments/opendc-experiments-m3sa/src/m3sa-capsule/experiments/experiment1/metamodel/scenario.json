@@ -1,0 +1,36 @@
+{
+  "name": "outputs/",
+  "topologies": [
+    {
+      "pathToFile": "experiments/experiment1/metamodel/topologies/topology_mse.json"
+    },
+    {
+      "pathToFile": "experiments/experiment1/metamodel/topologies/topology_sqrt.json"
+    },
+    {
+      "pathToFile": "experiments/experiment1/metamodel/topologies/topology_asymptotic1.json"
+    },
+    {
+      "pathToFile": "experiments/experiment1/metamodel/topologies/topology_asymptotic2.json"
+    }
+  ],
+  "workloads": [
+    {
+      "pathToFile": "experiments/experiment1/inputs/surfsara",
+      "type": "ComputeWorkload"
+    }
+  ],
+  "carbonTracePaths": ["experiments/experiment1/inputs/carbon_2022.parquet"],
+  "allocationPolicies": [
+    {
+      "policyType": "Mem"
+    }
+  ],
+  "exportModels": [
+    {
+      "exportInterval": 30000
+    }
+  ],
+  "outputFolder": "results/experiment1/metamodel",
+  "runs": 1
+}

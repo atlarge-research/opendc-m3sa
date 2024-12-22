@@ -27,20 +27,21 @@ import kotlin.io.path.Path
  * PATH_TO_PYTHON_MAIN should point to the main python file, ran when the analysis starts.
  */
 
-public val ANALYSIS_SCRIPTS_DIRECTORY: String = "./opendc-experiments/opendc-experiments-m3sa/src/main/python"
-public val ABSOLUTE_SCRIPT_PATH: String =
-    Path("$ANALYSIS_SCRIPTS_DIRECTORY/main.py").toAbsolutePath().normalize().toString()
-public val SCRIPT_LANGUAGE: String =
-    Path("$ANALYSIS_SCRIPTS_DIRECTORY/venv/bin/python3").toAbsolutePath().normalize().toString()
 
 public fun m3saAnalyze(
     outputFolderPath: String,
     m3saSetupPath: String,
+    m3saExecPath: String,
 ) {
+    val scriptPath: String =
+        Path("$m3saExecPath/main.py").toAbsolutePath().normalize().toString()
+    val scriptLanguage: String =
+        Path("$m3saExecPath/venv/bin/python3").toAbsolutePath().normalize().toString()
+
     val process =
         ProcessBuilder(
-            SCRIPT_LANGUAGE,
-            ABSOLUTE_SCRIPT_PATH,
+            scriptLanguage,
+            scriptPath,
             "-o",
             outputFolderPath,
             m3saSetupPath,
