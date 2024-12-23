@@ -76,7 +76,7 @@ internal class M3SACommand : CliktCommand(name = "experiment") {
             this.n -= 1
         } else {
             file.appendText("===================================================\n")
-            println("Finished for country ${scenarioPath}")
+            println("Finished ${scenarioPath}")
             return
         }
 
