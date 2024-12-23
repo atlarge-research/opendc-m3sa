@@ -16,14 +16,19 @@ all_metamodels = []
 countries_metamodels = []
 migration_metamodels = []
 
-for file in os.listdir("./../../../results/experiment3/metamodels/"):
+for file in os.listdir("./results/experiment3/metamodels/"):
     country_code = file[:2]
     if country_code == "EU":
         country_code = file[:6]
 
+    # print(f"!!!!!!!!!!!!24\n\n\n\n")
+    # # the content of this folder is
+    # for file in os.listdir("./experiment3/metamodels/"):
+    #     print(file)
+
     metamodel = MetaModel(
         country_code=country_code,
-        co2_emissions=pd.read_parquet(f"./../../../results/experiment3/metamodels/{file}")["carbon_emission"].values
+        co2_emissions=pd.read_parquet(f"./results/experiment3/metamodels/{file}")["carbon_emission"].values
     )
     if "." in country_code:
         country_code = country_code.replace(".", "")
@@ -64,7 +69,7 @@ plt.xlabel('Total Emissions [tCO2]', fontsize=22)
 plt.xlim(0, None)
 plt.xticks(fontsize=32, ticks=[0, 4, 8, 12])
 plt.tight_layout()
-plt.savefig('./../../../results/figure-exports/figure-14.pdf')
+plt.savefig('./results/figure-exports/figure-14.pdf')
 plt.close()
 
 # 10 lowest CO2 emissions
@@ -103,7 +108,7 @@ for bar, emission in zip(bars, lowest_10_emissions):
 
 plt.grid(False)
 plt.tight_layout()
-plt.savefig('./../../../results/figure-exports/figure-15.pdf')
+plt.savefig('./results/figure-exports/figure-15.pdf')
 plt.close()
 
 # All CO2 emissions (linear scale)
@@ -140,7 +145,7 @@ for bar, emission in zip(bars, all_emissions):
 
 plt.grid(False)
 plt.tight_layout()
-plt.savefig('./../../../results/figure-exports/figure-16.pdf')
+plt.savefig('./results/figure-exports/figure-16.pdf')
 plt.close()
 
 # All CO2 emissions (log scale)
@@ -174,5 +179,5 @@ for bar, emission in zip(bars, all_emissions):
 
 plt.grid(False)
 plt.tight_layout()
-plt.savefig('./../../../results/figure-exports/figure-17.pdf')
+plt.savefig('./results/figure-exports/figure-17.pdf')
 plt.close()

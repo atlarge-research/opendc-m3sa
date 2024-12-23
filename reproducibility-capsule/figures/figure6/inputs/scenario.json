@@ -2,7 +2,7 @@
     "name": "outputs/",
     "topologies": [
         {
-            "pathToFile": "figures/figure6/inputs/topologies/topology_truth_sqrt_1.json"
+            "pathToFile": "figures/figure6/inputs/topologies/topology.json"
         }
     ],
     "workloads": [

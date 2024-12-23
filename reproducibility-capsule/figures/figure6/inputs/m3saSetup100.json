@@ -12,7 +12,7 @@
     "y_max": 8.5,
     "y_ticks_count": 4,
     "x_ticks_count": 3,
-    "plot_title": "Window size: 20",
+    "plot_title": "Window size: 100",
     "current_unit": "W",
     "unit_scaling_magnitude": 3,
     "figsize": [10, 10],

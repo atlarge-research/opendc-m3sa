@@ -69,8 +69,8 @@ main() {
     echo "Running experiments: ${to_run[@]}"
     for experiment in "${to_run[@]}"; do
         if [ "$(type -t $experiment)" = function ]; then
-            "$experiment"
-            export_figures
+            "$experiment" || exit 1
+            export_figures || exit 1
         else
             echo "Experiment $experiment not found."
         fi
@@ -79,124 +79,86 @@ main() {
     echo "Experiments complete."
 }
 
-
-
 figure4() {
   echo "Running figure 4..."
-  java -jar "$M3SA_OPENDC_JAR" --experiment-path "$FIGURE_4_SCENARIO1" -m "${FIGURE_4_SETUP1}" -e "$M3SA_PY"
-  java -jar "$M3SA_OPENDC_JAR" --experiment-path "$FIGURE_4_SCENARIO2" -m "${FIGURE_4_SETUP2}" -e "$M3SA_PY"
-  java -jar "$M3SA_OPENDC_JAR" --experiment-path "$FIGURE_4_SCENARIO3" -m "${FIGURE_4_SETUP3}" -e "$M3SA_PY"
+  java -jar "$M3SA_OPENDC_JAR" --experiment-path "$FIGURE_4_SCENARIO1" -m "${FIGURE_4_SETUP1}" -e "$M3SA_PY" || exit 1
+  java -jar "$M3SA_OPENDC_JAR" --experiment-path "$FIGURE_4_SCENARIO2" -m "${FIGURE_4_SETUP2}" -e "$M3SA_PY" || exit 1
+  java -jar "$M3SA_OPENDC_JAR" --experiment-path "$FIGURE_4_SCENARIO3" -m "${FIGURE_4_SETUP3}" -e "$M3SA_PY" || exit 1
   echo "Done figure 4."
 }
 
 figure6() {
   echo "Running figure 6..."
-  java -jar "$M3SA_OPENDC_JAR" --experiment-path "$FIGURE_6_SCENARIO" -m "${FIGURE_6_SETUP1}" -e "$M3SA_PY"
-  java -jar "$M3SA_OPENDC_JAR" --experiment-path "$FIGURE_6_SCENARIO" -m "${FIGURE_6_SETUP20}" -e "$M3SA_PY"
-  java -jar "$M3SA_OPENDC_JAR" --experiment-path "$FIGURE_6_SCENARIO" -m "${FIGURE_6_SETUP100}" -e "$M3SA_PY"
+  java -jar "$M3SA_OPENDC_JAR" --experiment-path "$FIGURE_6_SCENARIO" -m "${FIGURE_6_SETUP1}" -e "$M3SA_PY" || exit 1
+  java -jar "$M3SA_OPENDC_JAR" --experiment-path "$FIGURE_6_SCENARIO" -m "${FIGURE_6_SETUP20}" -e "$M3SA_PY" || exit 1
+  java -jar "$M3SA_OPENDC_JAR" --experiment-path "$FIGURE_6_SCENARIO" -m "${FIGURE_6_SETUP100}" -e "$M3SA_PY" || exit 1
   echo "Done figure 6."
 }
-
 
 experiment1() {
     echo "Running experiment 1..."
 
     EXTRA_RAW_SIM="experiments/experiment1/footprinter/raw-output"
 
-    # ========================== FIGURE A ==========================
-    ./"$M3SA_PY/m3sa" -o "$EXP1_FOOTPRINTER_RESULT" "$EXP1_FOOTPRINTER_M3SA" "$EXP1_FOOTPRINTER_RAW" ||
-        exit 1
-    # ========================== FIGURE A ==========================
+    # FIGURE A
+    ./"$M3SA_PY/m3sa" -o "$EXP1_FOOTPRINTER_RESULT" "$EXP1_FOOTPRINTER_M3SA" "$EXP1_FOOTPRINTER_RAW" || exit 1
 
-    # ========================== FIGURE B ==========================
-    java -jar "$M3SA_OPENDC_JAR" --experiment-path "$EXP1_MULTIMODEL_SCENARIO" ||
-        exit 1
-
-    # Copy footprinter raw output to simulation data results
+    # FIGURE B
+    java -jar "$M3SA_OPENDC_JAR" --experiment-path "$EXP1_MULTIMODEL_SCENARIO" || exit 1
     for dir in $(ls "$EXTRA_RAW_SIM"); do
-        cp -r "$EXTRA_RAW_SIM/$dir" "$EXP1_MULTIMODEL_RESULT/outputs/raw-output/$dir" ||
-            exit 1
+        cp -r "$EXTRA_RAW_SIM/$dir" "$EXP1_MULTIMODEL_RESULT/outputs/raw-output/$dir" || exit 1
     done
+    ./"$M3SA_PY/m3sa" -o "$EXP1_MULTIMODEL_RESULT/outputs" "$EXP1_MULTIMODEL_M3SA" "$EXP1_MULTIMODEL_RESULT/outputs/raw-output" || exit 1
 
-    # Run M3SA python to generate plots
-    ./"$M3SA_PY/m3sa" -o "$EXP1_MULTIMODEL_RESULT/outputs" "$EXP1_MULTIMODEL_M3SA" "$EXP1_MULTIMODEL_RESULT/outputs/raw-output" ||
-        exit 1
-    # ========================== FIGURE B ==========================
-
-    # ========================== FIGURE C ==========================
-    java -jar "$M3SA_OPENDC_JAR" --experiment-path "$EXP1_METAMODEL_SCENARIO" ||
-        exit 1
-
-    # Copy footprinter raw output to simulation data results
+    # FIGURE C
+    java -jar "$M3SA_OPENDC_JAR" --experiment-path "$EXP1_METAMODEL_SCENARIO" || exit 1
     for dir in $(ls "$EXTRA_RAW_SIM"); do
-        cp -r "$EXTRA_RAW_SIM/$dir" "$EXP1_METAMODEL_RESULT/outputs/raw-output/$dir" ||
-            exit 1
+        cp -r "$EXTRA_RAW_SIM/$dir" "$EXP1_METAMODEL_RESULT/outputs/raw-output/$dir" || exit 1
     done
-
-    # Run M3SA python to generate plots
-    ./"$M3SA_PY/m3sa" -o "$EXP1_METAMODEL_RESULT/outputs" "$EXP1_METAMODEL_M3SA" "$EXP1_METAMODEL_RESULT/outputs/raw-output" ||
-        exit 1
-    # ========================== FIGURE C ==========================
+    ./"$M3SA_PY/m3sa" -o "$EXP1_METAMODEL_RESULT/outputs" "$EXP1_METAMODEL_M3SA" "$EXP1_METAMODEL_RESULT/outputs/raw-output" || exit 1
 
     echo "Done experiment 1."
 }
 
 experiment2() {
     echo "Running experiment 2..."
-
     for failure_model in "${EXP2_FAILURE_MODELS[@]}"; do
-        for experiment in "${EXP2_EXPERIMENTS[@]}"; do
-            echo "Running experiment 2 for $experiment with $failure_model..."
+        for exp in "${EXP2_EXPERIMENTS[@]}"; do
+            echo "Running experiment 2 for $exp with $failure_model..."
             java -jar "$M3SA_OPENDC_JAR" \
-                --experiment-path "${EXP2_SCENARIO_PATH}/scenario-${experiment}${failure_model}.json" \
-                -m "${EXP2_M3SA_SETUP}/m3sa-${experiment}${failure_model}.json" \
-                -e "$M3SA_PY"
+                --experiment-path "${EXP2_SCENARIO_PATH}/scenario-${exp}${failure_model}.json" \
+                -m "${EXP2_M3SA_SETUP}/m3sa-${exp}${failure_model}.json" \
+                -e "$M3SA_PY" || exit 1
         done
     done
+    echo "Done experiment 2."
 }
 
 experiment3() {
     echo "Running experiment 3..."
+    python3 -m venv .venv || exit 1
+    source .venv/bin/activate || exit 1
+    python3 -m pip install pandas seaborn pyarrow || exit 1
 
-    # run all the simulations
-#    for scenario in $(ls "$EXP3_SCENARIOS_PATH"); do
-#        echo "Running experiment 3 for $scenario..."
-#        java -jar "$M3SA_OPENDC_JAR" \
-#            --experiment-path "${EXP3_SCENARIOS_PATH}/${scenario}" \
-#            -m "$EXP3_M3SA_SETUP" \
-#            -e "$M3SA_PY"
-#        break;
-#    done
-
-    # centralize the metamodels within a single directory
-    mkdir -p "$EXP3_METAMODELS_PATH"
-
-    # copy the entire directory from EXP3_METAMODELS_COLLECTION TO EXP3_METAMODELS_PATH
-    cp -r "$EXP3_METAMODELS_COLLECTION"/* "$EXP3_METAMODELS_PATH"
-
-    # run the python script located in EXP3_PLOTTER_PATH
-    python3 "$EXP3_PLOTTER_PATH" "$EXP3_METAMODELS_PATH" "$EXP3_SIMULATION_RESULTS_PATH"
-
-#    for scenario in $(ls "$EXP3_SIMULATION_RESULTS_PATH"); do
-#      scenario_name=$(echo $scenario | cut -d'.' -f1)
-#      scenario_name=$(echo "$scenario" | sed 's/^scenario_//')
-#
-#      if [ -f "$EXP3_SIMULATION_RESULTS_PATH/scenario_$scenario_name/outputs/raw-output/metamodel/seed=0/carbon_emission.parquet" ]; then
-#        mv "$EXP3_SIMULATION_RESULTS_PATH/scenario_$scenario_name/outputs/raw-output/metamodel/seed=0/carbon_emission.parquet" "$EXP3_METAMODELS_PATH/$scenario_name.parquet"
-#      fi
-#
-#      rm -rf "$EXP3_SIMULATION_RESULTS_PATH/scenario_$scenario_name"
-#    done
+    mkdir -p "$EXP3_METAMODELS_PATH" || exit 1
+    cp -r "$EXP3_METAMODELS_COLLECTION"/* "$EXP3_METAMODELS_PATH" || exit 1
+    python3 "$EXP3_PLOTTER_PATH" || exit 1
 
     echo "Experiment 3 done."
 }
 
 export_figures() {
-    mkdir -p results/figure-exports
-
+    mkdir -p results/figure-exports || exit 1
     for figure in $(find results -iname "*.pdf"); do
+        local destination="results/figure-exports/$(basename "$figure")"
+
+        if [ "$figure" = "$destination" ]; then
+            # Skip figure, it's already in the export directory
+            continue
+        fi
+
         echo "Exporting $figure..."
-        cp "$figure" "results/figure-exports/$(basename $figure)"
+        cp "$figure" "$destination" || exit 1
     done
 }
 
