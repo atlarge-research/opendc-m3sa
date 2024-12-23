@@ -17,7 +17,7 @@ Multi- and Meta-Model Simulation and Analysis for ICT infrastructure.
 
 ## Abstract
 
-Datacenters are vital for the digital society but represent a considerable fraction of global energy consumption. To improve their sustainability and performance when demand is foreseen to increase, we envision simulators and simulation-based digital twins will become primary decision-making tools. However, unlike other fields focusing on key societal infrastructure such as waterworks and mass transit, datacenter simulators cannot yet combine multiple, independent models into their operation. Addressing this challenge, in this work we propose M3SA, a datacenter simulation and analysis framework that uses discrete-event simulation to predict, per model and combined into a meta-model, the impact on climate and performance of various realistic datacenter conditions. We design an architecture for simulating with multiple concurrent models, a technique to integrate the results of multiple models into a meta-model, and a procedure to evaluate the accuracy of the meta-model.
+Datacenters are vital for the digital society but represent a considerable fraction of global energy consumption. To improve their sustainability and performance when demand is foreseen to increase, we envision simulators and simulation-based digital twins will become primary decision-making tools. However, unlike other fields focusing on key societal infrastructure such as waterworks and mass transit, datacenter simulators cannot yet combine multiple, independent models into their operation. Addressing this challenge, in this work we propose M3SA, a datacenter simulation and analysis framework that uses discrete-event simulation to predict, per model and combined into a Meta-Model, the impact on climate and performance of various realistic datacenter conditions. We design an architecture for simulating with multiple concurrent models, a technique to integrate the results of multiple models into a Meta-Model, and a procedure to evaluate the accuracy of the Meta-Model.
 
 ## Repository Structure
 
@@ -56,9 +56,9 @@ Gradle, JDK 21, Python 3.12, Make
 ```
 
 ### Results
-- All the figures will be available in `/reproducibility-capsule/results/figure-exports`.
+- After step 2, figures are available in `reproducibility-capsule/results/figure-exports`.
 
-- All the raw-results will be available in `reproducibility-capsule/results/`.
+- After step 2, raw-results are available in `reproducibility-capsule/results`.
 
 ### Running a specific experiment / figure
 `make run-<experiment/figure>`
@@ -69,28 +69,28 @@ e.g., `make run-figure4`
 
 ### Figure 4
 - ~2 minutes running time*
-- figures in `reproducibility-capsule/figure-exports/` (Figures 4A, 4B, 4C)
+- figures in `reproducibility-capsule/figure-exports` (Figures 4A, 4B, 4C)
 - raw results in `reproducibility-capsule/results/figure4`
 
 ### Figure 6
 - ~a few blinks of an eye*
-- figures in `reproducibility-capsule/figure-exports/` (Figures 6A, 6B, 6C)
+- figures in `reproducibility-capsule/figure-export/` (Figures 6A, 6B, 6C)
 - raw results in `reproducibility-capsule/results/figure6`
 
 ### Experiment 1 
 - ~2 minutes running time*
-- figures in `reproducibility-capsule/figure-exports/` (Figures 9A, 9B, 9C)
+- figures in `reproducibility-capsule/figure-exports` (Figures 9A, 9B, 9C)
 - raw results in `reproducibility-capsule/results/experiment1`
 
 ### Experiment 2
 - ~ 5 minutes running time*
-- figures in `reproducibility-capsule/figure-exports/` (Figures 12A, 12B, 12C, 12D)
+- figures in `reproducibility-capsule/figure-exports` (Figures 12A, 12B, 12C, 12D)
 - raw results in `reproducibility-capsule/results/experiment2`
 
 ### Experiment 3
 - ~ 1-2 minutes dependency setup (automatic installation)*
 - ~a few blinks of an eye* running time
-- figures in `reproducibility-capsule/figure-exports/` (Figures 14, 15, 16, 17)
+- figures in `reproducibility-capsule/figure-exports` (Figures 14, 15, 16, 17)
 - raw results in `reproducibility-capsule/results/experiment3`
 
 _*all running times have been measured on a 2023 MacBook Pro with an M2 Pro chip and 16 GB of RAM._
