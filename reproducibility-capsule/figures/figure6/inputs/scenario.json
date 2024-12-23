@@ -1,0 +1,24 @@
+{
+    "name": "outputs/",
+    "topologies": [
+        {
+            "pathToFile": "figures/figure6/inputs/topologies/topology_truth_sqrt_1.json"
+        }
+    ],
+    "workloads": [
+        {
+            "pathToFile": "figures/figure6/inputs/bitbrains",
+            "type": "ComputeWorkload"
+        }
+    ],
+    "carbonTracePaths": [
+        "figures/figure4/inputs/carbon_2022.parquet"
+    ],
+    "allocationPolicies": [
+        {
+            "policyType": "Mem"
+        }
+    ],
+    "outputFolder": "results/figure6/",
+    "runs": 1
+}

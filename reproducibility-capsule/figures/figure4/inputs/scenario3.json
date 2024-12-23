@@ -1,0 +1,45 @@
+{
+    "name": "outputs/",
+    "topologies": [
+        {
+            "pathToFile": "figures/figure4/inputs/topologies/topology_sqrt.json"
+        },
+        {
+            "pathToFile": "figures/figure4/inputs/topologies/topology_linear.json"
+        },
+        {
+            "pathToFile": "figures/figure4/inputs/topologies/topology_square.json"
+        },
+        {
+            "pathToFile": "figures/figure4/inputs/topologies/topology_cubic.json"
+        },
+        {
+            "pathToFile": "figures/figure4/inputs/topologies/topology_mse.json"
+        },
+        {
+            "pathToFile": "figures/figure4/inputs/topologies/topology_asymptotic1.json"
+        },
+        {
+            "pathToFile": "figures/figure4/inputs/topologies/topology_asymptotic2.json"
+        },
+        {
+            "pathToFile": "figures/figure4/inputs/topologies/topology_asymptotic3.json"
+        }
+    ],
+    "workloads": [
+        {
+            "pathToFile": "figures/figure4/inputs/marconi-22",
+            "type": "ComputeWorkload"
+        }
+    ],
+    "carbonTracePaths": [
+        "figures/figure4/inputs/carbon_2022.parquet"
+    ],
+    "allocationPolicies": [
+        {
+            "policyType": "Mem"
+        }
+    ],
+    "outputFolder": "results/figure4/",
+    "runs": 1
+}

@@ -1,0 +1,18 @@
+{
+    "multimodel": true,
+    "metamodel": true,
+    "metric": "carbon_emission",
+    "window_size": 1,
+    "window_function": "mean",
+    "meta_function": "mean",
+    "plot_type": "cumulative_time_series",
+    "y_ticks_count": 4,
+    "x_ticks_count": 5,
+    "plot_title": "Total emissions over time",
+    "y_label": "Emissions [tonsCO2]",
+    "x_label": "Time [day/month]",
+    "current_unit": "",
+    "unit_scaling_magnitude": 6,
+    "figsize": [10, 5],
+    "figure_export_name": "figure-4C"
+}

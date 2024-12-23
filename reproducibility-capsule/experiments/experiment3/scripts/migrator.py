@@ -24,7 +24,7 @@ class MetaModel:
             self.trim_metamodels_by_time(start, end)
 
         self.total_emissions = sum(self.co2_emissions)
-        self.total_emissions = self.total_emissions / 1e3 # emissions in tons, at marconi scale
+        self.total_emissions = self.total_emissions / 1e3
         self.total_emissions = round(self.total_emissions, 2)
 
     def trim_metamodels_by_time(self, start, end):
@@ -62,7 +62,7 @@ def get_metamodels(path):
             co2 = file["carbon_emission"]
             metamodels.append(
                 MetaModel(
-                    country_code=filename[:2],  # country code is (must be) the first 2 characters of the file name
+                    country_code=filename[:2],
                     timestamps=timestamps,
                     co2_emissions=co2
                 )
@@ -162,7 +162,7 @@ def align_metamodels_by_size(metamodels):
     return metamodels
 
 
-def output_analysis():
+def output_analysis(metamodels):
     for metamodel in metamodels:
         # print all the relevant details on one line with new line at the end
         print(f"{metamodel.country_code} ----- {metamodel.total_emissions}")

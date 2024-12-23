@@ -5,6 +5,12 @@ OPENDC_BUILD_DIR=$(M3SA_OPENDC_DIR)/build
 run: build
 	./m3sa-experiment
 
+run-figure4: build
+	./m3sa-experiment figure4
+
+run-figure6: build
+	./m3sa-experiment figure6
+
 run-experiment1: build
 	./m3sa-experiment experiment1
 
