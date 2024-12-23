@@ -5,6 +5,15 @@ OPENDC_BUILD_DIR=$(M3SA_OPENDC_DIR)/build
 run: build
 	./m3sa-experiment
 
+run-experiment1: build
+	./m3sa-experiment experiment1
+
+run-experiment2: build
+	./m3sa-experiment experiment2
+
+run-experiment3: build
+	./m3sa-experiment experiment3
+
 run-docker: build-docker
 	sudo docker run -it m3sa
 

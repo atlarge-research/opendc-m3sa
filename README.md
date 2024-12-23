@@ -38,6 +38,8 @@ We design M3SA to be capable of operating coupled or decoupled from a datacenter
 The user interacts with the system through the Input Interface (A) and Output Interface (B) interfaces. The M3SA process begins with the user configuring the Multi-Model (C) and the Meta-Model (D). The simulation process is triggered and controlled by the M3SA backend, occurring between (M)-(S): the system sets up a simulation based on user input, simulates, and centralizes predictions. The simulation block (M)-(S) reflects the operation of discrete-event simulators commonly used in the field, similar to the architectures of OpenDC and CloudSim; specifically, the simulation assembler (M) is where single models are typically defined in current experiments.
 
 ## Reproducibility capsule
+The reproducibility capsule runs all the experiments and generates the results and relevant figures from the paper. To reduce overhead, we reduced reproducibility to only 3 steps. The reproducibility capsule is available without Docker (we are working on Docker support) and has been tested on macOS and Linux.
+
 
 [//]: # (### Reproducibility &#40;with docker&#41;)
 
@@ -61,17 +63,59 @@ The user interacts with the system through the Input Interface (A) and Output In
 [//]: # (````)
 [//]: # (### Reproducibility capsule &#40;without docker&#41;)
 [//]: # (Step 1 &#40;alternative&#41; - without docker)
-#### Dependencies
+### Dependencies
 - Gradle
 - JDK 21
 - Python 3.12
 - Make
 
+### Steps
+
+#### 0. Enter the correct directory
 ```bash
 cd reproducibility-capsule
-make build
-make run
 ```
+
+#### 1. Make Build
+```bash
+ make build
+```
+
+#### 2. Running all the experiments
+```bash
+ make run
+```
+
+#### Alternative 2. Running a specific experiment
+```bash
+ make run-experiment1
+```
+
+```bash
+ make run-experiment2
+```
+
+```bash
+ make run-experiment3
+```
+
+
+### Experiment 1 
+- ~2 minutes running time*
+- raw results in `reproducibility-capsule/results/experiment1`
+- figures in `reproducibility-capsule/figure-exports/` (Figures 9A, 9B, 9C)
+
+### Experiment 2
+- ~ 5 minutes running time*
+- raw results in `reproducibility-capsule/results/experiment2`
+- figures in `reproducibility-capsule/figure-exports/`
+
+### Experiment 3
+- ~ 40 minutes running time*
+- raw results in `reproducibility-capsule/results/experiment3`
+
+
+_*all running times have been measured on a 2023 MacBook Pro with an M2 Pro chip and 16 GB of RAM._
 
 ## Open Science
 We provide M3SA as open-source software, under the MIT license. Together with M3SA, we make open-source the trace archive used throughout the experiments.  Double-blinded submission link: https://anonymous.4open.science/r/trace-archive/.

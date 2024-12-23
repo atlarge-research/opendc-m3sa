@@ -23,6 +23,8 @@ EXP2_M3SA_SETUP="experiments/experiment2/inputs"
 
 EXP3_SCENARIOS_PATH="experiments/experiment3/inputs/scenarios"
 EXP3_M3SA_SETUP="experiments/experiment3/inputs/m3saSetup.json"
+EXP3_SIMULATION_RESULTS_PATH="results/experiment3/"
+EXP3_METAMODELS_PATH="results/experiment3/metamodels"
 
 main() {
     if [ ! -d "$M3SA_PY" ]; then
@@ -117,12 +119,26 @@ experiment2() {
 experiment3() {
     echo "Running experiment 3..."
 
+    # run all the simulations
     for scenario in $(ls "$EXP3_SCENARIOS_PATH"); do
         echo "Running experiment 3 for $scenario..."
         java -jar "$M3SA_OPENDC_JAR" \
             --experiment-path "${EXP3_SCENARIOS_PATH}/${scenario}" \
             -m "$EXP3_M3SA_SETUP" \
             -e "$M3SA_PY"
+    done
+
+    # centralize the metamodels within a single directory
+    mkdir -p "$EXP3_METAMODELS_PATH"
+    for scenario in $(ls "$EXP3_SIMULATION_RESULTS_PATH"); do
+      scenario_name=$(echo $scenario | cut -d'.' -f1)
+      scenario_name=$(echo "$scenario" | sed 's/^scenario_//')
+
+      if [ -f "$EXP3_SIMULATION_RESULTS_PATH/scenario_$scenario_name/outputs/raw-output/metamodel/seed=0/carbon_emission.parquet" ]; then
+        cp "$EXP3_SIMULATION_RESULTS_PATH/scenario_$scenario_name/outputs/raw-output/metamodel/seed=0/carbon_emission.parquet" "$EXP3_METAMODELS_PATH/$scenario_name.parquet"
+      fi
+
+      rm -rf "$EXP3_SIMULATION_RESULTS_PATH/scenario_$scenario_name"
     done
 
     echo "Experiment 3 done."
