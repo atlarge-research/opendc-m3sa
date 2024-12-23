@@ -99,6 +99,10 @@ cd reproducibility-capsule
  make run-experiment3
 ```
 
+#### 3. Clean
+```bash
+ make clean
+```
 
 ### Experiment 1 
 - ~2 minutes running time*
