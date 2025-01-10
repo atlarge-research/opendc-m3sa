@@ -1,0 +1,205 @@
+# M3SA integration tutorial
+
+M3SA is a tool able to perform "Multi and Meta-Model Simulation Analysis".
+M3SA can integrate with any simulation infrastructure, as long as integration steps are followed. We build M3SA towards
+performance, scalability, and **universality**, and provide as open-science.
+
+In this document, we present a tutorial of using M3SA and the steps to integrate our tool into your simulation
+infrastructure.
+
+If you are using OpenDC, none of adaptation steps are necessary, yet they can be useful to understand the structure of
+the tool. Step 3 is still necessary.
+
+**Contents**
+
+- [Running M3SA](#running-m3sa)
+- [M3SA configuration](#m3sa-configuration)
+- [Embedding M3SA with a simulator](#embedding-m3sa-with-a-simulator)
+
+# Running M3SA
+
+```
+usage: m3sa [-h] [-o [OUTPUT]] config simulation
+
+Multi-Model Simulation and Analysis
+
+positional arguments:
+  config                Path to the JSON configuration file
+  simulation            Path to the simulation directory
+
+options:
+  -h, --help            show this help message and exit
+  -o, --output [OUTPUT]
+                        Path to the output directory
+```
+
+#### Example:
+
+```bash
+m3sa m3sa-config.json outputs/raw-output -o outputs/
+```
+
+# M3SA Configuration
+
+The configuration is provided as a **json** file, providing the following fields:
+
+| Variable               | Type                    | Required? | Default       | Possible Answers                                      | Description                                                                                                                                                                 |
+|------------------------|-------------------------|-----------|---------------|-------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| multimodel             | boolean                 | no        | true          | true, false                                           | Whether or not to build a Multi-Model. If set to false, a Meta-Model will not be computed either.                                                                           |
+| metamodel              | boolean                 | no        | true          | true, false                                           | Whether to build a Meta-Model.                                                                                                                                              |
+| metric                 | string                  | yes       | N/A           | N/A                                                   | What metric to be analyzed from the computed files.                                                                                                                         |
+| current_unit           | string                  | no        | ""            | any string (e.g., "CO2", "Wh")                        | The international system unit of the metric to be analyzed, without prefixes. e.g., "W" for Watt is ok, "kW" is not.                                                        |
+| unit_scaling_magnitude | integer                 | no        | 10            | -9, -6, -3, 1, 3, 6, 9                                | The scaling factor to be applied to the metric (10^-9, 10^-6, 10^3, 10^0, 10^3, 10^6, 10^9). For no scaling, input 0.                                                       |            
+| window_size            | integer                 | no        | 1             | any positive, non-zero, integer                       | The size of the window, used for aggregating the chunks.                                                                                                                    |
+| window_function        | string                  | no        | "mean"        | "mean", "median"                                      | The function used by the window for aggregating the chunks (e.g., for "mean", the window will compute the mean of the samples).                                             |
+| meta_function          | string                  | no        | "mean"        | "mean", "median"                                      | The function used by the Meta-Model to be generated. For "mean", the Meta-Model takes the mean of the individual models, at the granularity established by the window-size. |
+| seed                   | integer                 | no        | 0             | any integer >= 0                                      | The seed of the simulation. This must correspond to the seed from the output directory (from seed=x).                                                                       |
+| plot_type              | string                  | no        | "time_series" | "time_series", "cumulative", "cumulative_time_series" | The type of the plot, generated by the Multi-Model and Meta-Model.                                                                                                          |
+| plot_title             | string                  | no        | ""            | any string                                            | The title of the plot.                                                                                                                                                      |
+| x_ticks_count          | integer                 | no        | None          | any integer, larger than 0                            | The number of ticks on x-axis.                                                                                                                                              |
+| y_ticks_count          | integer                 | no        | None          | any integer, larger than 0                            | The number of ticks on y-axis.                                                                                                                                              |
+| x_label                | string                  | no        | "Time"        | any string                                            | The label for the x-axis of the plot.                                                                                                                                       |
+| y_label                | string                  | no        | "Metric Unit" | any string                                            | The label for the y-axis of the plot.                                                                                                                                       |
+| y_min                  | double                  | no        | None          | any positive, non-zero, double                        | The minimum value for the vertical axis of the plot.                                                                                                                        |
+| y_max                  | double                  | no        | None          | any positive, non-zero, double                        | The maximum value for the vertical axis of the plot.                                                                                                                        |
+| x_min                  | double                  | no        | None          | any positive, non-zero, double                        | The minimum value for the horizontal axis of the plot.                                                                                                                      |
+| x_max                  | double                  | no        | None          | any positive, non-zero, double                        | The maximum value for the horizontal axis of the plot.                                                                                                                      |
+| plot_colors            | list[string]            | no        | false         | hex colors in the format `#AAAAAA`                    | The list of colors to plot the results.                                                                                                                                     |
+| fig_size               | tuple[integer, integer] | no        | (20, 10)      | any positive, non-zero, integer                       | The size of the figure.                                                                                                                                                     | 
+| figure_export_name     | string                  | no        | false         | the file name of the export                           | Provide a file name for the final figure.                                                                                                                                   |
+
+#### Example
+```json
+{
+  "multimodel": true,
+  "metamodel": true,
+  "metric": "power_draw",
+  "window_size": 10,
+  "window_function": "mean",
+  "meta_function": "mean",
+  "samples_per_minute": 2,
+  "plot_type": "time_series",
+  "y_ticks_count": 4,
+  "x_ticks_count": 5,
+  "y_min": 0,
+  "y_max": 33,
+  "y_label": "Power Draw [kw]",
+  "x_label": "Time [day/month]",
+  "current_unit": "",
+  "unit_scaling_magnitude": 3,
+  "figsize": [15, 5],
+  "plot_colors": [
+    "#B1B1B100",
+    "#B1B1B100",
+    "#B1B1B100",
+    "#B1B1B100",
+    "#0277BB",
+    "#EE7833"
+  ],
+  "figure_export_name": "figure-9C"
+}
+```
+
+---
+# Embedding M3SA with a simulator
+
+## Step 1: Adapt the simulator output directory structure
+
+The first step is to adapt the I/O of the simulation infrastructure to the format of M3SA.
+The output directory structure should have the following format:
+
+```
+[1] ── {simulation-directory-name} 📁 🔧
+[2]    ├── inputs 📁 🔒
+[3]    │   └── {m3sa-config-file}.json 📄 🔧
+[4]    │   └── {other input files / directory} 🔧
+[5]    ├── outputs 📁 🔒
+[6]    │   ├── raw-output 📁 🔒
+[7]    │   │   ├── 0 📁 🔒
+[8]    │   │   │   └── seed={your_seed}🔒
+[9]    │   │   │       └── {simulation_data_file}.parquet 📄 🔧
+[10]   │   │   │       └── {any other files / directory} ⚪
+[11]   │   │   ├── 1 📁 ⚪ 🔒
+[12]   │   │   │   └── seed={your_seed} 📁 ⚪ 🔒
+[13]   │   │   │       └── {simulation_data_file}.parquet 📄 ⚪ 🔧
+[14]   │   │   │       └── {any other files / directory} ⚪󠁪
+[15]   │   │   ├── metamodel 📁 ⚪
+[16]   │   │      └── seed={your_seed} 📁 ⚪
+[17]   │   │           └── {your_metric_name}.parquet 📄 ⚪
+[18]   │   │           └── {any other files / directory} ⚪
+[19]   │   └── {any other files / directory} 📁 ⚪
+[20]|  └──{any other files / directory} 📁 ⚪
+```
+
+📄 = file <br />
+📁 = directory <br />
+🔒 = fixed, the name of the directory/file must be the same.<br />
+🔧 = flexible, the name of the directory/file can differ. However, the item must be present.<br />
+⚪ = optional and flexible. The item can be absent. <br />
+
+- [1] = the name of the analyzed directory.
+- [2] = the _inputs_ directory, containing various inputs / configuration files.
+- [3] = the configuration file for M3SA, flexible naming, but needs to be a JSON file
+- [4],[10],[14],[18],[19],[20] = any other input files or directorys.
+- [5] = the _outputs_ directory, containing the raw-output. can contain any other files or directorys, besides the raw-output
+  directory.
+  After running a simulation, also a "simulation-analysis" directory will be generated in this directory.
+- [6] = raw-output directory, containing the raw output of the simulation.
+- [7],[11] = the IDs of the models. Must always start from zero. Possible values are 0, 1, 2 ... n, and "metamodel". The
+  id
+  of "metamodel" is reserved for the Meta-Model. Any simulation data in the respective directory will be treated as
+  Meta-Model data.
+- [8],[12] = the seed of the simulation. the seed must be the same for both [8], [12], and other equivalent, further
+  files.
+- [9],[13] = the file in which the simulation data is stored. The name of the file can differ, but it must be a parquet
+  file.
+- [15] = the Meta-Model directory, optional. If the directory is present, its data will be treated as Meta-Model data.
+- [16] = the Meta-Model seed directory. The seed must be the same as the seed of the simulation.
+- [17] = the Meta-Model output. The name of the file is of the type ```{your_metric_name}.parquet```. For example, if
+  you analyze CO2 emissions, the file will be named ```co2_emissions.parquet```.
+
+## Step 2: Adapt the simulation file format
+
+The simulator data file must be a 🪵 _parquet_ 🪵 file.
+
+The file must contain (at least) the columns:
+
+- timestamp: the timestamp, in milliseconds, of the data point (e.g., 30000, 60000, 90000) - the time unit is flexible.
+- {metric_name}: the value of the metric at the given timestamp. This is the metric analyzed (e.g., CO2_emissions,
+  energy_usage).
+
+e.g., if you are analyzing the CO2 emissions of a datacenter, for a timeperiod of 5 minutes, and the data is sampled
+every 30 seconds, the file will look like this:
+
+| timestamp | co2_emissions |
+|-----------|---------------|
+| 30000     | 31.2          |
+| 60000     | 31.4          |
+| 90000     | 28.5          |
+| 120000    | 31.8          |
+| 150000    | 51.5          |
+| 180000    | 51.2          |
+| 210000    | 51.4          |
+| 240000    | 21.5          |
+| 270000    | 21.8          |
+| 300000    | 21.2          |
+
+## Step 3: Running M3SA (decoupled from a simulator)
+
+The bash script `m3sa` should be executable and in the `PATH`.
+Using the directory structure from [Step 1](#step-1-adapt-the-simulator-output-directory-structure), execute:
+
+```bash
+m3sa inputs/m3sa-config-file.json outputs/raw-output -o outputs/
+```
+
+## (Optional) Step 4: Running M3SA (coupled with a simulator)
+
+Alternatively and optional, coupling M3SA with a simulator involves the simulation running the `m3sa` command
+below, after the simulation has finished:
+
+```bash
+m3sa inputs/m3sa-config-file.json outputs/raw-output -o outputs/
+```
+
+
