@@ -21,14 +21,14 @@ Datacenters are vital for the digital society but represent a considerable fract
 
 ## Repository Structure
 
--   `m3sa/` - M3SA independent tool
--   `m3sa-opendc/` - M3SA coupled with OpenDC
--   `reproducibility-capsule` - Reproducibility capsule of the experiments in the paper
--   `M3SA-technical-report.pdf` - Technical report of the paper
--   `m3sa-tutorial.md` - Tutorial on how to use M3SA, coupled and decoupled with a simulator
--   `README.md` - _you are here_
--   `LICENSE` - License file (MIT, Open Science)
--   others (e.g., `m3sa-architecture.png`, `.gitignore`, etc.)
+-   [`m3sa/`](m3sa) - M3SA independent tool
+-   [`m3sa-opendc/`](m3sa-opendc) - M3SA coupled with OpenDC
+-   [`reproducibility-capsule`](reproducibility-capsule) - Reproducibility capsule of the experiments in the paper
+-   [`M3SA-technical-report.pdf`](M3SA-technical-report.pdf) - Technical report of the paper
+-   [`m3sa-tutorial.md`](m3sa-tutorial.md) - Tutorial on how to use M3SA, coupled and decoupled with a simulator
+-   [`README.md`](README.md) - _you are here_
+-   [`LICENSE`](LICENSE) - License file (MIT, Open Science)
+-   others (e.g., [`m3sa-architecture.png`](m3sa-architecture.png), [`.gitignore`](.gitignore), etc.)
 
 ## M3SA Architecture
 
