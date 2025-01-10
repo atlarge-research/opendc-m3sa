@@ -25,6 +25,7 @@ Datacenters are vital for the digital society but represent a considerable fract
 -   `m3sa-opendc/` - M3SA coupled with OpenDC
 -   `reproducibility-capsule` - Reproducibility capsule of the experiments in the paper
 -   `M3SA-technical-report.pdf` - Technical report of the paper
+-   `m3sa-tutorial.md` - Tutorial on how to use M3SA, coupled and decoupled with a simulator
 -   `README.md` - _you are here_
 -   `LICENSE` - License file (MIT, Open Science)
 -   others (e.g., `m3sa-architecture.png`, `.gitignore`, etc.)
