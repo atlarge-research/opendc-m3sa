@@ -10,11 +10,15 @@ infrastructure.
 If you are using OpenDC, none of adaptation steps are necessary, yet they can be useful to understand the structure of
 the tool. Step 3 is still necessary.
 
+---
+
 **Contents**
 
 - [Running M3SA](#running-m3sa)
 - [M3SA configuration](#m3sa-configuration)
 - [Embedding M3SA with a simulator](#embedding-m3sa-with-a-simulator)
+
+---
 
 # Running M3SA
 
