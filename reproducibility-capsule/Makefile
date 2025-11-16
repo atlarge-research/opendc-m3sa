@@ -22,7 +22,7 @@ host-build: $(OPENDC_BUILD_DIR)
 	chmod +x m3sa-experiment
 
 $(OPENDC_BUILD_DIR):
-	cd ../m3sa-opendc && ./gradlew :opendc-experiments:opendc-experiments-m3sa:shadowJar
+	cd ../m3sa-opendc && chmod +x gradlew && ./gradlew :opendc-experiments:opendc-experiments-m3sa:shadowJar
 
 # Docker-backed execution (default) ---------------------------------------
 docker-build:

@@ -2,7 +2,6 @@ FROM python:3.12-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# System dependencies for Java/Gradle builds and Python tooling
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         bash \
@@ -15,7 +14,6 @@ RUN apt-get update \
         unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Pre-bake the Python environment so container runs only need to mount the repo
 WORKDIR /opt/m3sa
 COPY reproducibility-capsule/bin/m3sa/requirements.txt ./requirements.txt
 RUN python -m venv /opt/m3sa/venv \
@@ -25,7 +23,6 @@ RUN python -m venv /opt/m3sa/venv \
 ENV VIRTUAL_ENV=/opt/m3sa/venv
 ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 
-# Default working directory; overridden by Makefile docker runner
 WORKDIR /workspace
 
 ENTRYPOINT ["/bin/bash"]
