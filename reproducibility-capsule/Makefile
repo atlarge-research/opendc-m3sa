@@ -7,8 +7,8 @@ USE_DOCKER ?= 1
 DOCKER_IMAGE ?= m3sa-capsule
 DOCKERFILE ?= $(CURDIR)/Dockerfile
 DOCKER_CONTEXT ?= $(abspath ..)
-DOCKER_MOUNT := -v $(abspath ..):/workspace/private-opendc-m3sa
-DOCKER_WORKDIR := /workspace/private-opendc-m3sa/reproducibility-capsule
+DOCKER_MOUNT := -v $(abspath ..):/workspace/m3sa
+DOCKER_WORKDIR := /workspace/m3sa/reproducibility-capsule
 DOCKER_RUN := docker run --rm -it $(DOCKER_MOUNT) -w $(DOCKER_WORKDIR) $(DOCKER_IMAGE)
 
 # Host/native execution ----------------------------------------------------

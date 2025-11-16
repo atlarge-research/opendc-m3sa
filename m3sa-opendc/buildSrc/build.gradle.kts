@@ -24,6 +24,9 @@ plugins {
     `kotlin-dsl`
 }
 
+import org.gradle.api.tasks.compile.JavaCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 /* Project configuration */
 repositories {
     mavenCentral()
@@ -43,4 +46,15 @@ dependencies {
     implementation(libs.quarkus.gradle.extension)
 
     implementation(libs.gradle.node)
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    // Align Java compilation target with Kotlin to avoid mixed bytecode levels
+    sourceCompatibility = "19"
+    targetCompatibility = "19"
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    // Kotlin 1.x does not recognize JVM target 21; keep builds compatible across toolchains
+    kotlinOptions.jvmTarget = "19"
 }

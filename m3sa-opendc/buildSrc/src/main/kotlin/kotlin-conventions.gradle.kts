@@ -38,6 +38,7 @@ kotlin {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions.jvmTarget = "19"
     kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     kotlinOptions.freeCompilerArgs += "-Xjvm-default=all"
 }

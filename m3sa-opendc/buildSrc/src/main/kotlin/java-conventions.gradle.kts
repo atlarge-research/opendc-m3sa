@@ -38,5 +38,6 @@ java {
 }
 
 tasks.withType<JavaCompile> {
+    options.release.set(19)
     options.compilerArgs.add("-parameters")
 }
