@@ -7,8 +7,10 @@ USE_DOCKER ?= 1
 DOCKER_IMAGE ?= m3sa-capsule
 DOCKERFILE ?= $(CURDIR)/Dockerfile
 DOCKER_CONTEXT ?= $(abspath ..)
-DOCKER_MOUNT := -v $(abspath ..):/workspace/m3sa
-DOCKER_WORKDIR := /workspace/m3sa/reproducibility-capsule
+DOCKER_MOUNT_PATH := $(abspath ..)
+DOCKER_CONTAINER_ROOT := /workspace/project
+DOCKER_MOUNT := -v $(DOCKER_MOUNT_PATH):$(DOCKER_CONTAINER_ROOT)
+DOCKER_WORKDIR := $(DOCKER_CONTAINER_ROOT)/reproducibility-capsule
 DOCKER_RUN := docker run --rm -it $(DOCKER_MOUNT) -w $(DOCKER_WORKDIR) $(DOCKER_IMAGE)
 
 # Host/native execution ----------------------------------------------------
