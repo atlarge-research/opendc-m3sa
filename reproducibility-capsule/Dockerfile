@@ -1,29 +1,31 @@
 FROM python:3.12-slim
 
-RUN echo "deb http://deb.debian.org/debian sid main" > /etc/apt/sources.list.d/sid.list
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Update and install required packages
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    bash \
-    build-essential \
-    curl \
-    gnupg \
-    openjdk-21-jdk \
+# System dependencies for Java/Gradle builds and Python tooling
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        bash \
+        build-essential \
+        ca-certificates \
+        curl \
+        git \
+        make \
+        openjdk-21-jdk-headless \
+        unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Set up working directory
-WORKDIR /m3sa
+# Pre-bake the Python environment so container runs only need to mount the repo
+WORKDIR /opt/m3sa
+COPY reproducibility-capsule/bin/m3sa/requirements.txt ./requirements.txt
+RUN python -m venv /opt/m3sa/venv \
+    && /opt/m3sa/venv/bin/pip install --upgrade pip \
+    && /opt/m3sa/venv/bin/pip install -r requirements.txt
 
-# Copy the current working directory into the container
-COPY . /m3sa
+ENV VIRTUAL_ENV=/opt/m3sa/venv
+ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 
-# Set script permissions
-RUN mkdir -p $HOME/.local/bin
+# Default working directory; overridden by Makefile docker runner
+WORKDIR /workspace
 
-RUN chmod +x /m3sa/m3sa-experiment
-
-RUN cd /m3sa/bin/m3sa && make install
-
-# Default command to execute the script
-CMD ["/bin/bash", "-c", "./m3sa-experiment"]
+ENTRYPOINT ["/bin/bash"]

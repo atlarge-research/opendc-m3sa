@@ -1,0 +1,13 @@
+#!/bin/sh
+
+my_path() {
+    cd -P -- "$(dirname -- "$(realpath "$(command -v -- "$0")")")" && pwd -P
+}
+
+SRC_PATH="$(my_path)"
+VENV_PATH="$SRC_PATH/venv"
+
+[ ! -d "$VENV_PATH" ] && exit 1
+
+. "$VENV_PATH/bin/activate"
+python3 "$SRC_PATH/main.py" "$@"
